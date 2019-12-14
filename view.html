@@ -39,20 +39,22 @@
         // .:..::-> Set Up Shader <-::..:.
         // ----------------------------------------------------------------------
 
-        // 1. Get Vertex and Fragment Shader Text
-        var vShaderTxt = ShaderUtil.domShaderSrc('vertex_shader');
-        var fShaderTxt = ShaderUtil.domShaderSrc('fragment_shader');
+        // // 1. Get Vertex and Fragment Shader Text
+        // var vShaderTxt = ShaderUtil.domShaderSrc('vertex_shader');
+        // var fShaderTxt = ShaderUtil.domShaderSrc('fragment_shader');
 
-        // 2. Compile text and validate
-        var vShader = ShaderUtil.createShader(gl, vShaderTxt, gl.VERTEX_SHADER);
-        var fShader = ShaderUtil.createShader(
-          gl,
-          fShaderTxt,
-          gl.FRAGMENT_SHADER
-        );
+        // // 2. Compile text and validate
+        // var vShader = ShaderUtil.createShader(gl, vShaderTxt, gl.VERTEX_SHADER);
+        // var fShader = ShaderUtil.createShader(
+        //   gl,
+        //   fShaderTxt,
+        //   gl.FRAGMENT_SHADER
+        // );
 
-        // 3. Link the shaders together as a program.
-        var shaderProg = ShaderUtil.createProgram(gl, vShader, fShader, true);
+        // // 3. Link the shaders together as a program.
+        // var shaderProg = ShaderUtil.createProgram(gl, vShader, fShader, true);
+        var shaderProg = ShaderUtil.domShaderProgram(gl,"vertex_shader","fragment_shader",true);
+
 
         // 4. Get Location of Uniforms and Attributes.
         gl.useProgram(shaderProg);
