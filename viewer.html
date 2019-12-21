@@ -13,33 +13,23 @@
 		<script src="shaders.js"></script>
 		<script src="RenderLoop.js"></script>
 		<script src="Modal.js"></script>
+		<script src="Primatives.js"></script>
 
 		<script>
-			var gl,						//Global Reference to our extended GL context
-				gVertCnt = 0,			//TODO : Temporarly storing Vertice Count globally until we have our mesh function in later lessons.
-				uPointSizeLoc = -1,		//TODO : Temp storing globbally until we have a VAO object setup
-				uAngle = 0,
-				gRLoop,					//Global Ref to our Render Loop
-				gShader = null,
-				gModal = null;
+			var gl, gRLoop,	gShader, gModal;
 
 			window.addEventListener("load",function(){
-				//............................................				
-				//Get our extended GL Context Object
+				//Main Setup
 				gl = GLInstance("glcanvas").fSetSize(500,500).fClear();
-
-				//............................................
-				//SHADER STEPS
 				gShader = new TestShader(gl,[ 0.8,0.8,0.8,  1,0,0,  0,1,0,  0,0,1 ]); //Gray,Red,Green,Blue
+				
+				//Setup our modal
+				//var mesh = gl.fCreateMeshVAO("lines",null,[ 0,1,0, 0,-1,0     ,-1,0,0, 1,0,0 ]);
+				//mesh.drawMode = gl.LINES;
+				//gModal = new Modal(mesh);
+				gModal = new Modal(Primatives.GridAxis.createMesh(gl));	
 
-				//............................................
-				//Set Up Data Buffers
-				var mesh = gl.fCreateMeshVAO("lines",null,[ 0,1,0, 0,-1,0     ,-1,0,0, 1,0,0 ]);
-				mesh.drawMode = gl.LINES;
-				gModal = new Modal(mesh);	
-
-				//............................................
-				//Set Up For Drawing
+				//Start Rendering
 				RLoop = new RenderLoop(onRender).start();
 			});
 
@@ -53,9 +43,11 @@
 					var vertSrc = ShaderUtil.domShaderSrc("vertex_shader"),
 						fragSrc = ShaderUtil.domShaderSrc("fragment_shader");
 					super(gl,vertSrc,fragSrc);
+
 					//Our shader uses custom uniforms 
 					var uColor	= gl.getUniformLocation(this.program,"uColor");
 					gl.uniform3fv(uColor, aryColor);
+
 					gl.useProgram(null); //Done setting up shader
 				}
 			}
@@ -69,7 +61,9 @@
 	<script id="vertex_shader" type="x-shader/x-vertex">#version 300 es
 		in vec3 a_position;	//Standard position data.
 		layout(location=4) in float a_color;	//Will hold the 4th custom position of the custom position buffer.
+
 		uniform vec3 uColor[4];	//Color Array
+
 		out lowp vec4 color;	//Color to send to fragment shader.
 		
 		void main(void){
@@ -80,6 +74,7 @@
 
 	<script id="fragment_shader" type="x-shader/x-fragment">#version 300 es
 		precision mediump float;
+
 		in vec4 color;
 		out vec4 finalColor;
 		
